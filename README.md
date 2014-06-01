@@ -11,8 +11,8 @@ http://localhost:3000
 We've already loaded in bootstrap on the client side to help you format your project
 
 # Running the Application
-1/ Clone the repo
-2/ npm install
-3/ node app.js
+1. Clone the repo
+2. npm install
+3. node app.js
 
-Good luck!
+# Good luck!
