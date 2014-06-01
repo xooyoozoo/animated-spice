@@ -1,10 +1,8 @@
-/*
- * GET hello world home page.
+/**
+ * Basic route controller
  */
+var pages = require('./pages');
 
-exports.index = function(req, res){
-  res.render('index', {
-    title: 'DataHero Express Boilderplate',
-    layout: 'layout'
-  });
+module.exports = function(app) {
+    app.get('/', pages.index);
 };

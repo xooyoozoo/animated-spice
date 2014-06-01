@@ -27,7 +27,7 @@ app.use(express.cookieSession({
 }));
 app.use(app.router);
 
-require('./routes/route-controller')(app);
+require('./routes')(app);
 
 // development only
 if ('development' == app.get('env')) {
