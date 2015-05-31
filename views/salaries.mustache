@@ -1,0 +1,23 @@
+<div class="page-header">
+  <h2>{{name}}</h2>
+  <h6><a href="/employees/">back to main list</a></h6>
+</div>
+
+<table class="table" style="width: 60%; margin: 0 auto">
+  <thead>
+    <tr>
+      <th style="text-align:right">Salary</th>
+      <th></th>
+      <th>Period</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#salaryList}}
+    <tr>
+      <td align="right">{{salary}}</td>
+      <td></td>
+      <td>{{start}} <i>to</i> {{end}}</td>
+    </tr>
+  {{/salaryList}}
+  </tbody>
+</table>

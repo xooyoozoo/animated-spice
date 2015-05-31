@@ -1,1 +1,35 @@
-<h1>Hello, world!</h1>
+<div class="page-header">
+  <h3>Employee and Salary Information</h3>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Employees Data</h3>
+  </div>
+  <div class="panel-body uploader" id="employees">
+    Please upload employees CSV file
+  <div id="employeesProgress">
+    <br>
+  </div>
+  <input type="file" id="employeesFile" name="employees">
+  <input type="button" id="employeesButton" value="Upload">
+  </div>
+</div>
+
+  <!-- TODO: dedupilicate these two with yield-tags(?) -->
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Salaries Data</h3>
+  </div>
+  <div class="panel-body uploader" id="salaries">
+    Please upload salaries CSV file
+  <div id="salariesProgress">
+    <br>
+  </div>
+  <input type="file" id="salariesFile" name="salaries">
+  <input type="button" id="salariesButton" value="Upload">
+  </div>
+</div>
+
+<script src="js/upload.js"></script>

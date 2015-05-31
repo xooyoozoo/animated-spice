@@ -1,0 +1,27 @@
+<div class="page-header">
+  <h2>Employees</h2>
+  <h6><a href="/">reset all data</a></h6>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Employee ID</th>
+      <th>Employee Name</th>
+      <th>Birthday</th>
+      <th>Gender</th>
+      <th>Date Started</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#empList}}
+    <tr>
+      <td>{{employee_id}}</td>
+      <td><a href="/employees/{{employee_id}}">{{lastname}}, {{firstname}}</a></td>
+      <td>{{birthdate}}</td>
+      <td>{{sex}}</td>
+      <td>{{start_date}}</td>
+    </tr>
+  {{/empList}}
+  </tbody>
+</table>
