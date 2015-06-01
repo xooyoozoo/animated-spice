@@ -26,16 +26,21 @@
 
 
 <script>
+
+//subtract a day to prevent weird issues at overlap ranges
 //YYYY-MM-DD formatting from http://stackoverflow.com/a/16714931
-var now = (new Date()).toISOString().slice(0,10).replace(/-/g,"-");
+function procEndDate(end) {
+  var date = null;
+  if (end.toLowerCase() == 'now') date = new Date();
+  else date = new Date(Date.parse(end) - (1000 * 60 * 60 * 24));
+
+  return date.toISOString().slice(0,10).replace(/-/g,"-");
+}
 
 var dateList =  [ {{#salaryList}}
-                    '{{end}}', '{{start}}',
+                    procEndDate('{{end}}'), '{{start}}',
                     {{/salaryList}}
                   ].reverse();
-if (dateList[dateList.length - 1].toLowerCase() == 'now') {
-  dateList[dateList.length - 1] = now;
-}
 
 var salaryList =  [
                     {{#salaryList}}
