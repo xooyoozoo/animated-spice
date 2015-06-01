@@ -18,7 +18,7 @@ function createDb(callback) {
   if (tablesCreated !== 0) return null;
 
   db.closeDb = closeDb;
-  db.insertListAsRows = insertListAsRows;
+  db.insertArrayAsRows = insertArrayAsRows;
   db.createEmpList = createEmpList;
   db.getEmployeeSal = getEmployeeSal;
 
@@ -68,7 +68,7 @@ function insertArrayAsRows(list, tableName, res) {
   }
 }
 
-//Completion callback for query is render(Array)
+//Completion callback for query is render(err, Array)
 function createEmpList(render) {
   var db = this;
   var empList = [];
@@ -82,13 +82,13 @@ function createEmpList(render) {
   });
 }
 
-//First, name-query which has salaries-query as completion callback
-//Second, salaries-query has render(String, Array) as a completion callback
+//Runs first: name-query, which has salaries-query as completion callback
+//Second: salaries-query, which has render(err, String, Array) as a completion callback
 function getEmployeeSal(id, render) {
   var db = this;
   var output = {name: null, salaries: []};
 
-  var getSalaries = function(e, n) {
+  var getSalaries = function() {
     db.each("SELECT salary, start_of_salary, end_of_salary " +
             "FROM salaries WHERE employee_id = '" + id + "' " +
             "ORDER BY CAST(start_of_salary as INTEGER) DESC",
@@ -105,8 +105,7 @@ function getEmployeeSal(id, render) {
         output.salaries.push(salary);
       },
       function(err, numRows) {
-        var error = err || e;
-        render(error, output.name, output.salaries);
+        render(err, output.name, output.salaries);
       }
     );
   };
