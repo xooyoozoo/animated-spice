@@ -102,7 +102,7 @@ function upload(req, res, next) {
         res.status(400)
            .json({ data: 'File must be CSV with ' + tableCols.length + ' columns'});
       } else {
-        db.insertListAsRows(parsedTbl, tableName, res);
+        db.insertArrayAsRows(parsedTbl, tableName, res);
       }
 
     });

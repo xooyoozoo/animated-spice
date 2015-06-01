@@ -3,7 +3,7 @@ var sqlite3 = require('sqlite3');
 /*
 Returns a new database for a user. Tables are pre-created with the expected setup.
 
-Returned database object has the other querying methods pre-appended
+Returned database object has the other db-using methods pre-appended
 */
 function createDb(callback) {
   var db = new sqlite3.Database(':memory:');
@@ -30,14 +30,20 @@ function closeDb() {
     this.close();
   } catch (e) {
     //db in use? already closed?
-    //anyway, doesn't matter in the context of in-memory temp db
     return;
   }
 }
 
-function insertListAsRows(list, tableName, res) {
+/*
+Takes in an array of arrays.
+A[i] is all the data for a single row.
+A[i][j] is a single cell.
+Tables with empty cells are rejected here.
+ */
+function insertArrayAsRows(list, tableName, res) {
   var db = this;
   var numRows = list.length;
+
   var queryCallback = function(err) {
     numRows--;
     if (err) {

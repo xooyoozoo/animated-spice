@@ -1,3 +1,13 @@
+/*
+The upload function is bound to each of the two Upload button.
+Remaining files to upload are kept track of, and once that's empty,
+redirect to the employee listings page.
+
+Upload progress is computed client-side.
+Server keeps track of file validity & sends back error json if there's an issue.
+Messages are displayed inline in the upload widgets.
+ */
+
 function upload() {
   var tableName = this.parentNode.id;
 
@@ -20,9 +30,7 @@ function upload() {
       try {
         res = JSON.parse(req.response);
       } catch(err) {
-        res = {
-          data: req.responseText
-        };
+        res = { data: req.responseText };
       }
 
       if (req.status == 400 || req.status == 500) {
