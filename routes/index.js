@@ -184,9 +184,9 @@ module.exports = function(app) {
   app.get('/employees/', [passAlongDb, listEmployees]);
   app.get('/employees/:id', [passAlongDb, showSalaryHist]);
 
-  app.get('*', function(req, res, next) {
+  /*app.get('*', function(req, res, next) {
     res.redirect('/');
-  });
+  });*/
 
   app.use(function(err, req, res, next) {
     var mssg = err.message || 'Error!';
