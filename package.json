@@ -6,7 +6,10 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "csv-parse": "^0.1.2",
     "express": "^3.6.0",
-    "hogan-express": "^0.5.2"
+    "formidable": "^1.0.17",
+    "hogan-express": "^0.5.2",
+    "sqlite3": "https://github.com/mapbox/node-sqlite3/tarball/master"
   }
 }
