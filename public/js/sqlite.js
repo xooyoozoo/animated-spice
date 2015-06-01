@@ -1,5 +1,10 @@
 var sqlite3 = require('sqlite3');
 
+/*
+Returns a new database for a user. Tables are pre-created with the expected setup.
+
+Returned database object has the other querying methods pre-appended
+*/
 function createDb(callback) {
   var db = new sqlite3.Database(':memory:');
   var tablesCreated = 0;
@@ -12,12 +17,17 @@ function createDb(callback) {
 
   if (tablesCreated !== 0) return null;
 
+  db.closeDb = closeDb;
+  db.insertListAsRows = insertListAsRows;
+  db.createEmpList = createEmpList;
+  db.getEmployeeSal = getEmployeeSal;
+
   return db;
 }
 
-function closeDb(db) {
+function closeDb() {
   try {
-    db.close();
+    this.close();
   } catch (e) {
     //db in use? already closed?
     //anyway, doesn't matter in the context of in-memory temp db
@@ -25,7 +35,8 @@ function closeDb(db) {
   }
 }
 
-function insertListAsRows(db, list, tableName, res) {
+function insertListAsRows(list, tableName, res) {
+  var db = this;
   var numRows = list.length;
   var queryCallback = function(err) {
     numRows--;
@@ -43,7 +54,7 @@ function insertListAsRows(db, list, tableName, res) {
 
     for (var j = 0; j < row.length; j++) {
       if (row[j] === '' || row[j] === null) {
-        res.status(500).json({ data: 'All cells must have data' });
+        res.status(400).json({ data: 'All cells must have data' });
         return;
       }
     }
@@ -52,7 +63,8 @@ function insertListAsRows(db, list, tableName, res) {
 }
 
 //Completion callback for query is render(Array)
-function createEmpList(db, render) {
+function createEmpList(render) {
+  var db = this;
   var empList = [];
 
   db.each("SELECT * FROM employees",
@@ -60,13 +72,14 @@ function createEmpList(db, render) {
       empList.push(row);
     },
     function(err, numRows) {
-      render(empList);
+      render(err, empList);
   });
 }
 
 //First, name-query which has salaries-query as completion callback
 //Second, salaries-query has render(String, Array) as a completion callback
-function getEmployeeInfo(db, id, render) {
+function getEmployeeSal(id, render) {
+  var db = this;
   var output = {name: null, salaries: []};
 
   var getSalaries = function(e, n) {
@@ -77,21 +90,22 @@ function getEmployeeInfo(db, id, render) {
         var sal = Number(row.salary);
         var end = row.end_of_salary;
 
-        //from http://stackoverflow.com/a/2866613
+        //Thousands separator formatting from http://stackoverflow.com/a/2866613
         sal = sal.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1,");
 
-        if (Date.now() < Date.parse(end)) end = 'Now';
+        if (Date.now() < Date.parse(end)) end = 'now';
 
         var salary = {salary: sal, start: row.start_of_salary, end: end};
         output.salaries.push(salary);
       },
       function(err, numRows) {
-        render(output.name, output.salaries);
+        var error = err || e;
+        render(error, output.name, output.salaries);
       }
     );
   };
 
-  //get name
+  //get name from employee_id
   db.each("SELECT firstname, lastname FROM employees WHERE employee_id = '" +
           id + "' LIMIT 1 ",
     function(err, row) {
@@ -101,22 +115,6 @@ function getEmployeeInfo(db, id, render) {
   );
 }
 
-function countRows(table) {
-  var count = 0;
-
-  db.each("SELECT COUNT(*) as num FROM " + table, function(err, row) {
-    if (err) count = -1;
-    else count = row.num;
-  });
-
-  return count;
-}
-
 module.exports = {
-  createDb: createDb,
-  closeDb: closeDb,
-  insertListAsRows: insertListAsRows,
-  createEmpList: createEmpList,
-  getEmployeeInfo: getEmployeeInfo,
-  countRows: countRows
+  createDb: createDb
 };

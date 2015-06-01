@@ -17,15 +17,15 @@ function upload() {
   req.onreadystatechange = function() {
     if (req.readyState == 4) {
       var res = { data: null };
-      //try {
-      res = JSON.parse(req.response);
-      /*} catch(err) {
+      try {
+        res = JSON.parse(req.response);
+      } catch(err) {
         res = {
           data: req.responseText
         };
-      }*/
+      }
 
-      if (req.status === 500 && button.style.visibility != 'hidden') {
+      if (req.status == 400 || req.status == 500) {
         progress.innerHTML = 'Error: ' + res.data + '.  Try again!';
       } else if (req.status === 200) {
         button.style.visibility = 'hidden';
